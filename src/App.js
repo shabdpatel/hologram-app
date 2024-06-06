@@ -1,23 +1,36 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Dropzone from './Dropzone';
+import Sliders from './Sliders';
 
 function App() {
+  const [image, setImage] = useState(null);
+  const [parameters, setParameters] = useState({
+    param1: 50,
+    param2: 30,
+  });
+
+  const handleImageUpload = (file) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImage(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleParameterChange = (param, value) => {
+    setParameters((prevParams) => ({
+      ...prevParams,
+      [param]: value,
+    }));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Computer Generated Hologram</h1>
+      <Dropzone onDrop={handleImageUpload} />
+      {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
+      <Sliders parameters={parameters} onChange={handleParameterChange} />
     </div>
   );
 }
