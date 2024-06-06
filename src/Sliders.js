@@ -25,6 +25,16 @@ const Sliders = ({ parameters, onChange }) => {
         />
         <span>{parameters.param2}</span>
       </div>
+      <div className="slider-container">
+        <label>Parameter 2</label>
+        <Slider
+          min={0}
+          max={100}
+          value={parameters.param2}
+          onChange={(value) => onChange('param2', value)}
+        />
+        <span>{parameters.param2}</span>
+      </div>
     </div>
   );
 };
