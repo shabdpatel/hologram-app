@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Dropzone from './Dropzone';
 import Sliders from './Sliders';
-
+import Navbar from './Navbar';
 function App() {
   const [image, setImage] = useState(null);
   const [parameters, setParameters] = useState({
@@ -27,7 +27,10 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Computer Generated Hologram</h1>
+      <Navbar />
+      <header className="App-header">
+        <h1>Computer Generated Hologram</h1>
+      </header>
       <Dropzone onDrop={handleImageUpload} />
       {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
       <Sliders parameters={parameters} onChange={handleParameterChange} />
