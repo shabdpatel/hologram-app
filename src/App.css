@@ -38,3 +38,11 @@
 .slider-container span {
   margin-left: 10px;
 }
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+  nav > div {
+    width: 100%; /* Ensures each div takes full width */
+  }
+}
