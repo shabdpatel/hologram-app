@@ -3,6 +3,7 @@ import './App.css';
 import Dropzone from './Dropzone';
 import Sliders from './Sliders';
 import Navbar from './Navbar';
+
 function App() {
   const [image, setImage] = useState(null);
   const [parameters, setParameters] = useState({
@@ -11,11 +12,21 @@ function App() {
   });
 
   const handleImageUpload = (file) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImage(event.target.result);
-    };
-    reader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('http://localhost:5000/upload', { // Ensure this is the correct URL
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.text())
+    .then(result => {
+      console.log('Success:', result);
+      setImage(`/uploads/${file.name}`); // Update state with the path where file is stored
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
   };
 
   const handleParameterChange = (param, value) => {

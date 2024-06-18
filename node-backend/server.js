@@ -1,56 +1,39 @@
-// node-backend/server.js
-
 const express = require('express');
 const multer = require('multer');
-const { spawn } = require('child_process');
+const cors = require('cors');
 const path = require('path');
-const app = express();
-const port = 3001; // Port for your backend server
 
-// Multer configuration for handling file uploads
+const app = express();
+const port = 5000;
+
+// Use CORS middleware with explicit configuration
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only this origin to access the server
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow cookies to be sent
+  optionsSuccessStatus: 204
+}));
+
+// Configure storage for multer
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'uploads/') // Directory where uploaded files will be stored temporarily
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname)
-    }
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'uploads')); // Folder to store uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use original file name
+  },
 });
 
 const upload = multer({ storage: storage });
 
-// Example endpoint to handle image upload and processing
-app.post('/api/upload', upload.single('image'), (req, res) => {
-    // Path to your Python script
-    const pythonScriptPath = path.join(__dirname, 'path/to/your/python_script.py');
-    // Path to uploaded image file
-    const imagePath = req.file.path;
-
-    // Run the Python script as a child process
-    const pythonProcess = spawn('python', [pythonScriptPath, imagePath]);
-
-    pythonProcess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-        // Handle data from Python script (if needed)
-    });
-
-    pythonProcess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-        // Handle error output from Python script (if needed)
-    });
-
-    pythonProcess.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-        if (code === 0) {
-            // Assuming script succeeded, send back processed image path or data
-            res.json({ success: true, processedImagePath: 'path/to/processed/image' });
-        } else {
-            res.status(500).json({ success: false, error: 'Failed to process image' });
-        }
-    });
+// Middleware to handle file upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send('File uploaded successfully');
 });
 
-// Start the server
+// Serve static files (if needed)
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
