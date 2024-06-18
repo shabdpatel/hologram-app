@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 
 function App() {
   const [image, setImage] = useState(null);
+  const [processedImage, setProcessedImage] = useState(null);
   const [parameters, setParameters] = useState({
     param1: 50,
     param2: 30,
@@ -19,10 +20,11 @@ function App() {
       method: 'POST',
       body: formData,
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(result => {
       console.log('Success:', result);
-      setImage(`http://localhost:5000/uploads/${file.name}`); // Update state with the path where file is stored
+      setImage(`http://localhost:5000/uploads/${file.name}`);
+      setProcessedImage(result.imageUrl); // Set the URL of the processed image
     })
     .catch(error => {
       console.error('Error:', error);
@@ -44,6 +46,7 @@ function App() {
       </header>
       <Dropzone onDrop={handleImageUpload} />
       {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
+      {processedImage && <img src={processedImage} alt="Processed" className="processed-image" />}
       <Sliders parameters={parameters} onChange={handleParameterChange} />
     </div>
   );

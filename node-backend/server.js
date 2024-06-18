@@ -2,6 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
+const { spawn } = require('child_process');
+const fs = require('fs');
 
 const app = express();
 const port = 5000;
@@ -26,9 +28,22 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Middleware to handle file upload
+// Middleware to handle file upload and process the image
 app.post('/upload', upload.single('file'), (req, res) => {
-  res.send('File uploaded successfully');
+  const uploadedFilePath = path.join(__dirname, 'uploads', req.file.originalname);
+
+  // Spawn a Python process to process the image
+  const pythonProcess = spawn('python3', ['process_image.py', uploadedFilePath]);
+
+  pythonProcess.on('close', (code) => {
+    if (code !== 0) {
+      return res.status(500).send('Failed to process image');
+    }
+
+    // Assuming the processed image is saved in the same directory with '_processed' suffix
+    const processedFilePath = uploadedFilePath.replace(/(\.\w+)$/, '_processed$1');
+    res.send({ imageUrl: `http://localhost:5000/uploads/${path.basename(processedFilePath)}` });
+  });
 });
 
 // Serve static files from the uploads directory
