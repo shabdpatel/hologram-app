@@ -31,6 +31,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
   res.send('File uploaded successfully');
 });
 
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Serve static files (if needed)
 app.use(express.static(path.join(__dirname, 'public')));
 

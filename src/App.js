@@ -15,14 +15,14 @@ function App() {
     const formData = new FormData();
     formData.append('file', file);
 
-    fetch('http://localhost:5000/upload', { // Ensure this is the correct URL
+    fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: formData,
     })
     .then(response => response.text())
     .then(result => {
       console.log('Success:', result);
-      setImage(`/uploads/${file.name}`); // Update state with the path where file is stored
+      setImage(`http://localhost:5000/uploads/${file.name}`); // Update state with the path where file is stored
     })
     .catch(error => {
       console.error('Error:', error);
