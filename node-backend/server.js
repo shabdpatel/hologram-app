@@ -1,68 +1,63 @@
-import React, { useState } from 'react';
-import './App.css';
-import Dropzone from './Dropzone';
-import Sliders from './Sliders';
-import Navbar from './Navbar';
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+const path = require('path');
+const { spawn } = require('child_process');
+const fs = require('fs');
 
-function App() {
-  const [image, setImage] = useState(null);
-  const [processedImages, setProcessedImages] = useState({
-    numeriReImageUrl: null,
-    cghImageUrl: null,
-  });
-  const [parameters, setParameters] = useState({
-    param1: 50,
-    param2: 30,
-  });
+const app = express();
+const port = 5000;
 
-  const handleImageUpload = (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
+// Use CORS middleware with explicit configuration
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only this origin to access the server
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow cookies to be sent
+  optionsSuccessStatus: 204
+}));
 
-    fetch('http://localhost:5000/upload', {
-      method: 'POST',
-      body: formData,
-    })
-    .then(response => response.json())
-    .then(result => {
-      console.log('Success:', result);
-      setImage(`http://localhost:5000/uploads/${file.name}`);
-      setProcessedImages({
-        numeriReImageUrl: result.numeriReImageUrl,
-        cghImageUrl: result.cghImageUrl,
-      });
-      console.log('Processed Images State:', processedImages);
-    })
-    .catch(error => {
-      console.error('Error:', error);
+// Configure storage for multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'uploads')); // Folder to store uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use original file name
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Middleware to handle file upload and process the image
+app.post('/upload', upload.single('file'), (req, res) => {
+  const uploadedFilePath = path.join(__dirname, 'uploads', req.file.originalname);
+
+  // Spawn a Python process to process the image
+  const pythonProcess = spawn('python3', ['uploads/Modified.py', uploadedFilePath]);
+
+  pythonProcess.on('close', (code) => {
+    if (code !== 0) {
+      return res.status(500).send('Failed to process image');
+    }
+
+    // Assuming the processed images are saved in the same directory with '_numeri_re.bmp' and '_cgh.bmp' suffixes
+    const baseName = path.basename(uploadedFilePath, path.extname(uploadedFilePath));
+    const numeriReFilePath = path.join(__dirname, 'uploads', `${baseName}_numeri_re.bmp`);
+    const cghFilePath = path.join(__dirname, 'uploads', `${baseName}_cgh.bmp`);
+
+    res.send({
+      numeriReImageUrl: `http://localhost:5000/uploads/${path.basename(numeriReFilePath)}`,
+      cghImageUrl: `http://localhost:5000/uploads/${path.basename(cghFilePath)}`
     });
-  };
+  });
+});
 
-  const handleParameterChange = (param, value) => {
-    setParameters((prevParams) => ({
-      ...prevParams,
-      [param]: value,
-    }));
-  };
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-  return (
-    <div className="App">
-      <Navbar />
-      <header className="App-header">
-        <h1>Computer Generated Hologram</h1>
-      </header>
-      <Dropzone onDrop={handleImageUpload} />
-      {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
-      {processedImages.numeriReImageUrl && (
-        <img src={processedImages.numeriReImageUrl} alt="Numeri Re Processed" className="processed-image" />
-      )}
-      {processedImages.cghImageUrl && (
-        <img src={processedImages.cghImageUrl} alt="CGH Processed" className="processed-image" />
-      )}
-      <Sliders parameters={parameters} onChange={handleParameterChange} />
-    </div>
-  );
-}
+// Serve static files (if needed)
+app.use(express.static(path.join(__dirname, 'public')));
 
-export default App;
-
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
