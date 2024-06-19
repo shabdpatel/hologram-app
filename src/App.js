@@ -6,7 +6,10 @@ import Navbar from './Navbar';
 
 function App() {
   const [image, setImage] = useState(null);
-  const [processedImage, setProcessedImage] = useState(null);
+  const [processedImages, setProcessedImages] = useState({
+    numeriReImageUrl: null,
+    cghImageUrl: null,
+  });
   const [parameters, setParameters] = useState({
     param1: 50,
     param2: 30,
@@ -24,7 +27,10 @@ function App() {
     .then(result => {
       console.log('Success:', result);
       setImage(`http://localhost:5000/uploads/${file.name}`);
-      setProcessedImage(result.imageUrl); // Set the URL of the processed image
+      setProcessedImages({
+        numeriReImageUrl: result.numeriReImageUrl,
+        cghImageUrl: result.cghImageUrl,
+      });
     })
     .catch(error => {
       console.error('Error:', error);
@@ -46,7 +52,12 @@ function App() {
       </header>
       <Dropzone onDrop={handleImageUpload} />
       {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
-      {processedImage && <img src={processedImage} alt="Processed" className="processed-image" />}
+      {processedImages.numeriReImageUrl && (
+        <img src={processedImages.numeriReImageUrl} alt="Numeri Re Processed" className="processed-image" />
+      )}
+      {processedImages.cghImageUrl && (
+        <img src={processedImages.cghImageUrl} alt="CGH Processed" className="processed-image" />
+      )}
       <Sliders parameters={parameters} onChange={handleParameterChange} />
     </div>
   );
