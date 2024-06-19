@@ -48,16 +48,29 @@ function App() {
     <div className="App">
       <Navbar />
       <header className="App-header">
-        <h1>Computer Generated Hologram</h1>
+        <h1>Drop or Add the Image below that you want to cnvert to Computer Generated Hologram </h1>
       </header>
       <Dropzone onDrop={handleImageUpload} />
-      {image && <img src={image} alt="Uploaded" className="uploaded-image" />}
-      {processedImages.numeriReImageUrl && (
-        <img src={processedImages.numeriReImageUrl} alt="Numeri Re Processed" className="processed-image" />
-      )}
-      {processedImages.cghImageUrl && (
-        <img src={processedImages.cghImageUrl} alt="CGH Processed" className="processed-image" />
-      )}
+      <div className="image-container">
+        {image && (
+          <div className="image-box">
+            <h3>Uploaded Image</h3>
+            <img src={image} alt="Uploaded" className="uploaded-image" />
+          </div>
+        )}
+        {processedImages.numeriReImageUrl && (
+          <div className="image-box">
+            <h3>Numerically Reconstructed Image</h3>
+            <img src={processedImages.numeriReImageUrl} alt="Numeri Re Processed" className="processed-image" />
+          </div>
+        )}
+        {processedImages.cghImageUrl && (
+          <div className="image-box">
+            <h3>Computer Generated Hologram</h3>
+            <img src={processedImages.cghImageUrl} alt="CGH Processed" className="processed-image" />
+          </div>
+        )}
+      </div>
       <Sliders parameters={parameters} onChange={handleParameterChange} />
     </div>
   );
