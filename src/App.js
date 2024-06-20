@@ -5,6 +5,7 @@ import Sliders from './Sliders';
 import Navbar from './Navbar';
 
 function App() {
+  const [selectedFile, setSelectedFile] = useState(null);
   const [image, setImage] = useState(null);
   const [processedImages, setProcessedImages] = useState({
     numeriReImageUrl: null,
@@ -14,10 +15,16 @@ function App() {
     param1: 50,
     param2: 30,
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleImageUpload = (file) => {
+  const handleFileSelected = (file) => {
+    setSelectedFile(file);
+  };
+
+  const handleConvertClick = () => {
+    setLoading(true);
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', selectedFile);
 
     fetch('http://localhost:5000/upload', {
       method: 'POST',
@@ -26,7 +33,7 @@ function App() {
     .then(response => response.json())
     .then(result => {
       console.log('Success:', result);
-      setImage(`http://localhost:5000/uploads/${file.name}`);
+      setImage(`http://localhost:5000/uploads/${selectedFile.name}`);
       setProcessedImages({
         numeriReImageUrl: result.numeriReImageUrl,
         cghImageUrl: result.cghImageUrl,
@@ -34,6 +41,9 @@ function App() {
     })
     .catch(error => {
       console.error('Error:', error);
+    })
+    .finally(() => {
+      setLoading(false);
     });
   };
 
@@ -48,9 +58,14 @@ function App() {
     <div className="App">
       <Navbar />
       <header className="App-header">
-        <h1>Drop or Add the Image below that you want to cnvert to Computer Generated Hologram </h1>
+        <h1>Drop or Add the Image below that you want to convert to Computer Generated Hologram</h1>
       </header>
-      <Dropzone onDrop={handleImageUpload} />
+      <Dropzone onFileSelected={handleFileSelected} />
+      <Sliders parameters={parameters} onChange={handleParameterChange} />
+      {selectedFile && (
+        <button onClick={handleConvertClick}>Convert Image to CGH</button>
+      )}
+      {loading && <div className="loading">Loading...</div>}
       <div className="image-container">
         {image && (
           <div className="image-box">
@@ -71,7 +86,7 @@ function App() {
           </div>
         )}
       </div>
-      <Sliders parameters={parameters} onChange={handleParameterChange} />
+      
     </div>
   );
 }

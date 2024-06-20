@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 
-const Dropzone = ({ onDrop }) => {
+const Dropzone = ({ onFileSelected }) => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
-      onDrop(acceptedFiles[0]);
+      onFileSelected(acceptedFiles[0]);
     },
   });
 

@@ -49,6 +49,13 @@
   align-items: center;
   margin: 10px 0;
 }
+.loading {
+  font-size: 1.5em;
+  color: #000;
+  text-align: center;
+  margin-top: 20px;
+}
+
 
 .slider-container label {
   flex: 1;
