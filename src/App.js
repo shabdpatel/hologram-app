@@ -3,6 +3,8 @@ import './App.css';
 import Dropzone from './Dropzone';
 import Sliders from './Sliders';
 import Navbar from './Navbar';
+import Modal from './Modal';
+import { saveAs } from 'file-saver';
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -16,6 +18,8 @@ function App() {
     param2: 30,
   });
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState('');
 
   const handleFileSelected = (file) => {
     setSelectedFile(file);
@@ -54,6 +58,20 @@ function App() {
     }));
   };
 
+  const handleImageClick = (src) => {
+    setModalImageSrc(src);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setModalImageSrc('');
+  };
+
+  const handleDownload = (src) => {
+    saveAs(src, 'image.png'); // you can customize the default name
+  };
+
   return (
     <div className="App">
       <Navbar />
@@ -70,23 +88,26 @@ function App() {
         {image && (
           <div className="image-box">
             <h3>Uploaded Image</h3>
-            <img src={image} alt="Uploaded" className="uploaded-image" />
+            <img src={image} alt="Uploaded" className="uploaded-image" onClick={() => handleImageClick(image)} />
+            <button className="download-button" onClick={() => handleDownload(image)}>Download</button>
           </div>
         )}
         {processedImages.numeriReImageUrl && (
           <div className="image-box">
             <h3>Numerically Reconstructed Image</h3>
-            <img src={processedImages.numeriReImageUrl} alt="Numeri Re Processed" className="processed-image" />
+            <img src={processedImages.numeriReImageUrl} alt="Numeri Re Processed" className="processed-image" onClick={() => handleImageClick(processedImages.numeriReImageUrl)} />
+            <button className="download-button" onClick={() => handleDownload(processedImages.numeriReImageUrl)}>Download</button>
           </div>
         )}
         {processedImages.cghImageUrl && (
           <div className="image-box">
             <h3>Computer Generated Hologram</h3>
-            <img src={processedImages.cghImageUrl} alt="CGH Processed" className="processed-image" />
+            <img src={processedImages.cghImageUrl} alt="CGH Processed" className="processed-image" onClick={() => handleImageClick(processedImages.cghImageUrl)} />
+            <button className="download-button" onClick={() => handleDownload(processedImages.cghImageUrl)}>Download</button>
           </div>
         )}
       </div>
-      
+      <Modal show={isModalOpen} imageSrc={modalImageSrc} onClose={handleCloseModal} />
     </div>
   );
 }
