@@ -91,7 +91,7 @@ function App() {
     <div className="App">
       <Navbar />
       <header className="App-header">
-        <h1>Drop or Add the Image below that you want to convert to Computer Generated Hologram</h1>
+        <h1 className='Heading'>Drop or Add the Image below that you want to convert to Computer Generated Hologram</h1>
       </header>
       <Dropzone onFileSelected={handleFileSelected} />
       <Sliders parameters={parameters} onChange={handleParameterChange} />
