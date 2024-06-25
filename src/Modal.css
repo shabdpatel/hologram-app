@@ -52,3 +52,28 @@
 .download-button:hover {
   background-color: #0056b3;
 }
+
+.prev-button, .next-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 30px;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.prev-button {
+  left: 10px;
+}
+
+.next-button {
+  right: 10px;
+}
+
+.prev-button:hover, .next-button:hover {
+  background-color: rgba(0, 0, 0, 1);
+}
