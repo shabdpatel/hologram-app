@@ -1,13 +1,14 @@
 .App {
   text-align: center;
-  
 }
-.Heading{
+
+.Heading {
   margin-top: 2%;
   margin-bottom: 2%;
   font-size: 1.2rem;
-  font-weight:bold;
+  font-weight: bold;
 }
+
 .dropzone {
   width: 300px;
   height: 200px;
@@ -21,27 +22,42 @@
 
 .image-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 20px;
   flex-wrap: wrap;
   margin: 20px 0;
 }
 
 .image-box {
-  border: 1px solid #cccccc;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
-  width: 300px;
+  position: relative;
   text-align: center;
+  margin: 1px;
+  padding: 25px;
+  padding-bottom: 80px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .image-box h3 {
+  margin-bottom: 20px;
+  
+}
+
+.image-title {
+  font-size: 22px;
+  font-weight: bold;
   margin-bottom: 10px;
+  color: #007bff;
 }
 
 .uploaded-image, .processed-image {
-  max-width: 100%;
+  display: inline-block;
+  width: 100%;
   height: auto;
+  max-width: 300px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .sliders {
@@ -54,13 +70,6 @@
   align-items: center;
   margin: 10px 0;
 }
-.loading {
-  font-size: 1.5em;
-  color: #000;
-  text-align: center;
-  margin-top: 20px;
-}
-
 
 .slider-container label {
   flex: 1;
@@ -75,7 +84,7 @@
   flex-direction: column; /* Ensure content stacks vertically */
   align-items: center;
   justify-content: center;
-  /* position: fixed;*/
+  /* position: fixed; */
   margin: 20px auto;
   padding: 10px 20px;
   background-color: #007bff;
@@ -87,39 +96,6 @@
 
 .convert-button:hover {
   background-color: #0056b3;
-}
-
-/* App.css */
-.image-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.image-box {
-  position: relative;
-  text-align: center;
-  margin: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.image-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #007bff;
-}
-
-.uploaded-image, .processed-image {
-  width: 100%;
-  height: auto;
-  max-width: 300px;
-  cursor: pointer;
-  border-radius: 5px;
 }
 
 .download-button {
@@ -140,22 +116,16 @@
   background-color: #0056b3;
 }
 
+.loading {
+  font-size: 1.5em;
+  color: #000;
+  text-align: center;
+  margin-top: 20px;
+}
 
 @media (max-width: 768px) {
   .image-container {
     flex-direction: column;
     align-items: center;
-  }
-
-  .image-box {
-    width: 90%;
-  }
-
-  nav {
-    flex-direction: column;
-  }
-
-  nav > div {
-    width: 100%;
   }
 }
