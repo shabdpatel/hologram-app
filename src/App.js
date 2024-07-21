@@ -90,6 +90,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
+      <div style={{ paddingTop: '4rem' }}>
       <header className="App-header">
         <h1 className='Heading'>Drop or Add the Image below that you want to convert to Computer Generated Hologram</h1>
       </header>
@@ -123,6 +124,7 @@ function App() {
         )}
       </div>
       <Modal show={isModalOpen} imageSrc={modalImageSrc} onClose={handleCloseModal} onNext={handleNextImage} onPrev={handlePrevImage} />
+      </div>
     </div>
   );
 }
