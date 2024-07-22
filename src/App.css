@@ -39,6 +39,25 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.image-box1 {
+  position: relative;
+  text-align: center;
+  margin: 1px;
+  padding: 10px;
+  padding-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.uploaded-image1{
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  cursor: pointer;
+  border-radius: 5px;
+} 
+
 .image-box h3 {
   margin-bottom: 20px;
   
