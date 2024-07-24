@@ -31,9 +31,9 @@ const upload = multer({ storage: storage });
 // Middleware to handle file upload and process the image
 app.post('/upload', upload.single('file'), (req, res) => {
   const uploadedFilePath = path.join(__dirname, 'uploads', req.file.originalname);
-
+  const iterations = req.body.iterations || '8';
   // Spawn a Python process to process the image
-  const pythonProcess = spawn('python3', ['uploads/Modified.py', uploadedFilePath]);
+  const pythonProcess = spawn('python3', ['uploads/Modified.py', uploadedFilePath, iterations]);
 
   pythonProcess.on('close', (code) => {
     if (code !== 0) {

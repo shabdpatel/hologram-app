@@ -6,7 +6,7 @@ import time  # Importing time module for time-related
 import sys
 
 """ ----------------------------------""" 
-def chlo(obj_file):
+def chlo(obj_file,iterations=8):
     # Initialize lists to store results of multiple iterations
     mse_values_f = []  # List to store Mean Squared Error values
     cad_f = []  # List to store the Fourier Transformed CAD results
@@ -26,7 +26,7 @@ def chlo(obj_file):
         bit_depth = 8  # Bit depth for quantization
         q_level = (2**bit_depth - 1)  # Quantization levels
         max_g = 255  # Maximum grayscale value
-        limit = 8  # Number of iterations
+        limit = iterations  # Number of iterations
         SSE = []  # List to store Sum of Squared Errors (SSE)
         CGH_type = "Fourier"  # Type of Computer-Generated Holography
         
@@ -188,10 +188,19 @@ def chlo(obj_file):
     plt.imsave(f'{obj_file[:-4]}_cgh.bmp', np.angle(holo_f[inde_]), cmap='gray')  # Save corresponding hologram
     """---------------------------------------------------------------------"""
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python process_image.py <image_path>")
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print("Usage: python modified.py <image_path> [iterations]")
         sys.exit(1)
 
     image_path = sys.argv[1]
-    processed_image_path = chlo(image_path)
-    print(f"Processed image saved to {processed_image_path}")
+    iterations = 8  # Default value
+
+    if len(sys.argv) == 3:
+        try:
+            iterations = int(sys.argv[2])
+        except ValueError:
+            print("Error: iterations must be an integer")
+            sys.exit(1)
+
+    chlo(image_path, iterations)
+    print(f"Processing completed with {iterations} iterations")

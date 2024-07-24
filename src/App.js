@@ -15,7 +15,7 @@ function App() {
   });
   const [previewImage, setPreviewImage] = useState(null);
   const [parameters, setParameters] = useState({
-    param1: 50,
+    param1: 8,
     param2: 30,
   });
   const [loading, setLoading] = useState(false);
@@ -37,11 +37,11 @@ function App() {
   const handleFileSelected = (file) => {
     setSelectedFile(file);
   };
-
   const handleConvertClick = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append('file', selectedFile);
+    formData.append('iterations', parameters.param1.toString());
 
     fetch('http://localhost:5000/upload', {
       method: 'POST',
@@ -55,8 +55,8 @@ function App() {
           numeriReImageUrl: result.numeriReImageUrl,
           cghImageUrl: result.cghImageUrl,
         });
-        setPreviewImage(null); // Clear the preview
-        setSelectedFile(null); // Clear the selected file
+        setPreviewImage(null);
+        setSelectedFile(null);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -65,7 +65,7 @@ function App() {
         setLoading(false);
       });
   };
-
+  
   const handleParameterChange = (param, value) => {
     setParameters((prevParams) => ({
       ...prevParams,

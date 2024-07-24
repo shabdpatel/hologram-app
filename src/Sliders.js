@@ -1,28 +1,29 @@
-// Sliders.js
 import React from 'react';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
 
 const Sliders = ({ parameters, onChange }) => {
   return (
-    <div className="sliders">
-      <div className="slider-container">
-        <label>Parameter 1</label>
-        <Slider
-          min={0}
-          max={100}
+    <div className="sliders-container">
+      <div className="slider">
+        <label htmlFor="param1">Number of Iterations:</label>
+        <input
+          type="range"
+          id="param1"
+          min="1"
+          max="20"
           value={parameters.param1}
-          onChange={(value) => onChange('param1', value)}
+          onChange={(e) => onChange('param1', parseInt(e.target.value))}
         />
         <span>{parameters.param1}</span>
       </div>
-      <div className="slider-container">
-        <label>Parameter 2</label>
-        <Slider
-          min={0}
-          max={100}
+      <div className="slider">
+        <label htmlFor="param2">Parameter 2:</label>
+        <input
+          type="range"
+          id="param2"
+          min="0"
+          max="100"
           value={parameters.param2}
-          onChange={(value) => onChange('param2', value)}
+          onChange={(e) => onChange('param2', parseInt(e.target.value))}
         />
         <span>{parameters.param2}</span>
       </div>
