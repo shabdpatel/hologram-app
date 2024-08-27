@@ -43,20 +43,19 @@ function App() {
     formData.append('file', selectedFile);
     formData.append('iterations', parameters.param1.toString());
 
-    fetch('https://hologram-app-1.onrender.com/upload', { // Update the URL here
+    fetch('https://hologram-app-1.onrender.com/upload', {
       method: 'POST',
       body: formData,
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+      })
       .then(result => {
         console.log('Success:', result);
-        setImage(`https://hologram-app-1.onrender.com/uploads/${selectedFile.name}`); // Update the URL here
-        setProcessedImages({
-          numeriReImageUrl: result.numeriReImageUrl,
-          cghImageUrl: result.cghImageUrl,
-        });
-        setPreviewImage(null);
-        setSelectedFile(null);
+        // Process result
       })
       .catch(error => {
         console.error('Error:', error);
@@ -64,6 +63,7 @@ function App() {
       .finally(() => {
         setLoading(false);
       });
+
   };
 
 

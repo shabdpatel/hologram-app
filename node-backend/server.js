@@ -38,9 +38,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
   pythonProcess.on('close', (code) => {
     if (code !== 0) {
-      return res.status(500).send('Failed to process image');
+      return res.status(500).json({ error: 'Failed to process image' });
     }
-
     // Assuming the processed images are saved in the same directory with '_numeri_re.bmp' and '_cgh.bmp' suffixes
     const baseName = path.basename(uploadedFilePath, path.extname(uploadedFilePath));
     const numeriReFilePath = path.join(__dirname, 'uploads', `${baseName}_numeri_re.bmp`);
