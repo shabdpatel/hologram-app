@@ -10,11 +10,12 @@ const port = process.env.PORT || 5000;
 
 // Use CORS middleware with explicit configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://hologram-app-phi.vercel.app/'], // Add your frontend's URL here
+  origin: '*', // This should be changed back once debugging is complete
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 204
 }));
+
 
 // Configure storage for multer
 const storage = multer.diskStorage({
