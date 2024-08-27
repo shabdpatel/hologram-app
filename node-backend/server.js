@@ -6,11 +6,11 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 // Use CORS middleware with explicit configuration
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow only this origin to access the server
+  origin: ['http://localhost:3000', 'https://your-frontend-url.com'], // Add your frontend's URL here
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 204
@@ -54,6 +54,11 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve the root route
+app.get('/', (req, res) => {
+  res.send('Backend server is running!');
+});
 
 // Serve static files (if needed)
 app.use(express.static(path.join(__dirname, 'public')));
