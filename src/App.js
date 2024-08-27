@@ -43,14 +43,14 @@ function App() {
     formData.append('file', selectedFile);
     formData.append('iterations', parameters.param1.toString());
 
-    fetch('http://localhost:5000/upload', {
+    fetch('https://hologram-app-1.onrender.com/upload', { // Update the URL here
       method: 'POST',
       body: formData,
     })
       .then(response => response.json())
       .then(result => {
         console.log('Success:', result);
-        setImage(`http://localhost:5000/uploads/${selectedFile.name}`);
+        setImage(`https://hologram-app-1.onrender.com/uploads/${selectedFile.name}`); // Update the URL here
         setProcessedImages({
           numeriReImageUrl: result.numeriReImageUrl,
           cghImageUrl: result.cghImageUrl,
@@ -65,7 +65,8 @@ function App() {
         setLoading(false);
       });
   };
-  
+
+
   const handleParameterChange = (param, value) => {
     setParameters((prevParams) => ({
       ...prevParams,
@@ -108,7 +109,7 @@ function App() {
           <h1 className='Heading'>Drop or Upload the Image below that you want to convert to Computer Generated Hologram</h1>
         </header>
         <Dropzone onFileSelected={handleFileSelected} />
-        
+
         {previewImage && (
           <div className="image-box1">
             <h3 className="image-title">Image Preview</h3>

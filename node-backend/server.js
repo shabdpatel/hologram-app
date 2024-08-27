@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 
 // Use CORS middleware with explicit configuration
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://hologram-app.vercel.app/'], // Add your frontend's URL here
+  origin: ['http://localhost:3000', 'https://hologram-app-phi.vercel.app/'], // Add your frontend's URL here
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 204
